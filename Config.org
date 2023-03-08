@@ -364,6 +364,20 @@ Enable descriptions/annotations for completion minibuffer
     (setq magit-diff-refine-hunk t))
 #+end_src
 
+*** Projectile
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :init
+    (projectile-mode +1)
+    (setq projectile-project-search-path '(("~/projects/" . 1) "~/work/" ("~/stuff" . 1)))
+    (setq projectile-switch-project-action #'projectile-dired)
+
+    :bind (:map projectile-mode-map
+                ("C-c p" . projectile-command-map)))
+#+end_src
+
 ** Miscellaneous
 
 Various stuff that doesn't belong to a spesific place...
