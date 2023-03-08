@@ -1,0 +1,17 @@
+/.cache/
+/.config/
+/.emacs.d/backups
+/.local/
+/.emacs.d/eln-cache
+.emacs.d/tramp
+
+.emacs.d/auto-save-list
+.emacs.d/backups
+.emacs.d/cache
+.emacs.d/eln-cache
+.emacs.d/history
+.emacs.d/recentf
+.emacs.d/straight
+.emacs.d/tramp
+.emacs.d/transient
+
