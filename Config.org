@@ -244,7 +244,7 @@ Also doom modline!
 ** Completion
 Okay, let's go with Vertico/Consult way...
 
-*** Vertico
+*** TODO Vertico
 #+begin_src emacs-lisp
 
   (defvar +vertico-company-completion-styles '(basic partial-completion orderless)
@@ -289,7 +289,7 @@ Okay, let's go with Vertico/Consult way...
   (use-package consult-dir
     :ensure t
     :bind (("C-x C-d" . consult-dir)
-           :map minibuffer-local-completion-map
+           :map vertico-map
            ("C-x C-d" . consult-dir)
            ("C-x C-j" . consult-dir-jump-file)))
 
@@ -363,6 +363,7 @@ Enable descriptions/annotations for completion minibuffer
 
 #+end_src
 
+
 ** Coding
 
 *** Best Git FE Ever!
@@ -386,6 +387,28 @@ Enable descriptions/annotations for completion minibuffer
 
     :bind (:map projectile-mode-map
                 ("C-c p" . projectile-command-map)))
+
+  (use-package rg
+    :ensure t
+    :init
+    (rg-enable-default-bindings))
+
+  (use-package ag
+    :ensure t)
+
+#+end_src
+
+** TODO Org-Mode
+
+** Term
+
+*** TODO VTerm
+Needs some more configuration. zsh escape codes, tmux ecc...
+#+begin_src emacs-lisp
+  ;; TODO set this variable to avoid compile module prompt 
+  ;;(setq vterm-always-compile-module t)
+  (use-package vterm
+    :ensure t)
 #+end_src
 
 ** Miscellaneous
@@ -422,7 +445,7 @@ Various stuff that doesn't belong to a spesific place...
     (global-set-key (kbd "C-h x") #'helpful-command)
     ;; Lookup the current symbol at point. C-c C-d is a common keybinding
     ;; for this in lisp modes.
-    ;; (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+    (global-set-key (kbd "C-h .") #'helpful-at-point)
 
     ;; Look up *F*unctions (excludes macros).
     ;;
