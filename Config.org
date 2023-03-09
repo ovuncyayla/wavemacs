@@ -199,16 +199,26 @@ Also doom modline!
 *** Other UI Releated Things
 
 #+begin_src emacs-lisp
-    (use-package all-the-icons
-      :ensure t
-      :commands (all-the-icons-octicon
-                 all-the-icons-faicon
-                 all-the-icons-fileicon
-                 all-the-icons-wicon
-                 all-the-icons-material
-                 all-the-icons-alltheicon)
-      :config
-      (all-the-icons-install-fonts t))
+  (use-package all-the-icons
+    :ensure t
+    :commands (all-the-icons-octicon
+               all-the-icons-faicon
+               all-the-icons-fileicon
+               all-the-icons-wicon
+               all-the-icons-material
+               all-the-icons-alltheicon)
+    :config
+    (unless
+        ;; A quick way to check if the fonts are installed
+        ;; Another aproach would be to use 'memoize.el'
+        (and (file-exists-p (expand-file-name "~/.local/share/fonts/all-the-icons.ttf"))
+             (file-exists-p (expand-file-name "~/.local/share/fonts/file-icons.ttf"))
+             (file-exists-p (expand-file-name "~/.local/share/fonts/fontawesome.ttf"))
+             (file-exists-p (expand-file-name "~/.local/share/fonts/material-design-icons.ttf"))
+             (file-exists-p (expand-file-name "~/.local/share/fonts/octicons.ttf"))
+             (file-exists-p (expand-file-name "~/.local/share/fonts/weathericons.ttf")))
+      (all-the-icons-install-fonts t)))
+
 
     (use-package all-the-icons-completion
       :config
@@ -219,14 +229,14 @@ Also doom modline!
       :hook ((prog-mode conf-mode) . highlight-numbers-mode)
       :config (setq highlight-numbers-generic-regexp "\\_<[[:digit:]]+\\(?:\\.[0-9]*\\)?\\_>"))
 
-  (use-package hl-line
-    ;; Highlights the current line
-    :init
-    (defvar global-hl-line-modes
-      '(prog-mode text-mode conf-mode special-mode
-        org-agenda-mode dired-mode)
-      "What modes to enable `hl-line-mode' in.")
-    (global-hl-line-mode))
+    (use-package hl-line
+      ;; Highlights the current line
+      :init
+      (defvar global-hl-line-modes
+        '(prog-mode text-mode conf-mode special-mode
+                    org-agenda-mode dired-mode)
+        "What modes to enable `hl-line-mode' in.")
+      (global-hl-line-mode))
 
 #+end_src
 
@@ -275,7 +285,7 @@ Okay, let's go with Vertico/Consult way...
   ;; TODO Configure this!!!!
   (use-package consult
     :ensure t)
-  
+
   (use-package consult-dir
     :ensure t
     :bind (("C-x C-d" . consult-dir)
@@ -330,7 +340,7 @@ Completion styles for consult
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))  
+        completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 
 *** Marginalia
@@ -350,7 +360,7 @@ Enable descriptions/annotations for completion minibuffer
   ;; Must be in the :init section of use-package such that the mode gets
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
-  
+
 #+end_src
 
 ** Coding
