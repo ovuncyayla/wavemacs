@@ -54,7 +54,7 @@ tangle all of the configuration into 'init.el'
   (defvar bootstrap-version)
   (let ((bootstrap-file
 	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-	(bootstrap-version 6))
+(bootstrap-version 6))
     (unless (file-exists-p bootstrap-file)
       (with-current-buffer
 	  (url-retrieve-synchronously
@@ -158,7 +158,23 @@ tangle all of the configuration into 'init.el'
     image-animate-loop t)
 
   ;; Ediff
+  ;; Don't create new frames for ediff session
   (advice-add 'ediff-window-display-p :override #'ignore)
+
+  ;; Restor window configuration after ediff session
+  (defvar ediff-last-windows nil
+    "Last ediff window configuration.")
+
+  (defun ediff-restore-windows ()
+    "Restore window configuration to `ediff-last-windows'."
+    (set-window-configuration ediff-last-windows)
+    (remove-hook 'ediff-after-quit-hook-internal
+                 'ediff-restore-windows))
+
+  (defadvice ediff-buffers (around ediff-restore-windows activate)
+    (setq ediff-last-windows (current-window-configuration))
+    (add-hook 'ediff-after-quit-hook-internal 'ediff-restore-windows)
+    ad-do-it)
   ;;(ediff)
 
 #+end_src
@@ -172,7 +188,7 @@ Doom themes are great!
   (use-package doom-themes
   :ensure t
   :init
-  (load-theme 'doom-dracula t))
+  (load-theme 'doom-1337 t))
 
   (use-package heaven-and-hell
     :ensure t
@@ -180,7 +196,7 @@ Doom themes are great!
     (setq heaven-and-hell-theme-type 'dark)
     (setq heaven-and-hell-themes
       '((light . doom-nord-light)
-        (dark . doom-dracula)))
+        (dark . doom-1337)))
     :hook (after-init . heaven-and-hell-init-hook)
     :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
        ("<f6>" . heaven-and-hell-toggle-theme)))
@@ -247,17 +263,9 @@ Okay, let's go with Vertico/Consult way...
 *** TODO Vertico
 #+begin_src emacs-lisp
 
-  (defvar +vertico-company-completion-styles '(basic partial-completion orderless)
-    "Completion styles for company to use.
-
-  The completion/vertico module uses the orderless completion style by default,
-  but this returns too broad a candidate set for company completion. This variable
-  overrides `completion-styles' during company completion sessions.")
-
-  (defvar +vertico-consult-fd-args nil
-    "Shell command and arguments the vertico module uses for fd.")
-
   (use-package vertico
+    :straight
+    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
     :init
     (vertico-mode)
 
@@ -273,13 +281,68 @@ Okay, let's go with Vertico/Consult way...
     ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
     (setq vertico-cycle t))
 
-  ;; (use-package vertico-multiform
-  ;;   :init
-  ;;   ;; Enable vertico-multiform
-  ;;   (vertico-multiform-mode))
+    (use-package vertico-posframe
+      :hook (vertico-mode . vertico-posframe-mode))
 
-  (use-package vertico-posframe
-    :hook (vertico-mode . vertico-posframe-mode))
+  (use-package vertico-multiform
+    :straight
+    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+    :after vertico
+    :init
+
+    (setq vertico-multiform-commands
+      '(
+        ;; (consult-line
+        ;;  posframe
+        ;;  (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+        ;;  (vertico-posframe-border-width . 10)
+        ;;  ;; NOTE: This is useful when emacs is used in both in X and
+        ;;  ;; terminal, for posframe do not work well in terminal, so
+        ;;  ;; vertico-buffer-mode will be used as fallback at the
+        ;;  ;; moment.
+        ;; (vertico-posframe-fallback-mode . vertico-buffer-mode)
+        (execute-extended-command indexed reverse)
+        (t buffer)
+        ))
+
+    ;; Enable vertico-multiform
+       (vertico-multiform-mode t))
+
+  (use-package vertico-indexed
+    :straight
+    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+    :after vertico)
+
+  (use-package vertico-quick
+    :straight
+    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+    :after vertico)
+
+  (use-package vertico-reverse
+    :straight
+    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+    :after vertico)
+
+  ;; Configure directory extension.
+  (use-package vertico-directory
+    :straight
+    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+    :after vertico
+    :ensure nil
+    ;; More convenient directory navigation commands
+    :bind (:map vertico-map
+                ("RET" . vertico-directory-enter)
+                ("DEL" . vertico-directory-delete-char)
+                ("M-DEL" . vertico-directory-delete-word))
+    ;; Tidy shadowed file names
+    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+  (use-package vertico-mouse
+    :straight
+    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+    :after vertico
+    :init (vertico-mouse-mode))
+
 
 #+end_src
 
@@ -413,10 +476,12 @@ Enable descriptions/annotations for completion minibuffer
 *** TODO VTerm
 Needs some more configuration. zsh escape codes, tmux ecc...
 #+begin_src emacs-lisp
-  ;; TODO set this variable to avoid compile module prompt 
-  ;;(setq vterm-always-compile-module t)
-  (use-package vterm
-    :ensure t)
+      ;; TODO set this variable to avoid compile module prompt
+      ;;(setq vterm-always-compile-module t)
+      (use-package vterm
+        :ensure t
+        :init
+        (setq vterm-shell 'eshell))
 #+end_src
 
 ** Miscellaneous
@@ -461,3 +526,8 @@ Various stuff that doesn't belong to a spesific place...
     ;; already links to the manual, if a function is referenced there.
     (global-set-key (kbd "C-h F") #'helpful-function))
 #+end_src
+
+# Local Variables:
+# eval: (add-hook 'after-save-hook (lambda ()(if (y-or-n-p "Reload?")(load-file user-init-file))) nil t)
+# eval: (add-hook 'after-save-hook (lambda ()(if (y-or-n-p "Tangle?")(org-babel-tangle))) nil t)
+# End:
