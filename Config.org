@@ -4,6 +4,12 @@
 * Wavemacs Configuration
 Let's try to configure emacs using org mode.
 
+** TODO Dependencies
+- Ripgrep(counsult default grep)
+- fd
+- Cmake (for vterm)
+
+
 ** First things first, package management
 I will use *straight.el* as package maneger with *use-package* integration so I am disabling *package.el* in *early-init.el*
 
