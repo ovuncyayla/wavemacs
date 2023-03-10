@@ -9,7 +9,6 @@ Let's try to configure emacs using org mode.
 - fd
 - Cmake (for vterm)
 
-
 ** First things first, package management
 I will use *straight.el* as package maneger with *use-package* integration so I am disabling *package.el* in *early-init.el*
 
@@ -356,11 +355,7 @@ Okay, let's go with Vertico/Consult way...
 
 #+begin_src emacs-lisp
 
-  ;; TODO Configure this!!!!
   (use-package consult
-    :ensure t)
-
-  (use-package consult-dir
     :ensure t
     :bind (
            ;;:map vertico-map
@@ -404,7 +399,10 @@ Okay, let's go with Vertico/Consult way...
            ;; Minibuffer history
            :map minibuffer-local-map
            ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-           ))
+    ))
+
+  (use-package consult-dir
+    :ensure t)
 
   (use-package consult-flycheck)
 
