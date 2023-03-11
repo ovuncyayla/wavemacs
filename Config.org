@@ -610,6 +610,22 @@ Various stuff that doesn't belong to a spesific place...
     ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
     ;; already links to the manual, if a function is referenced there.
     (global-set-key (kbd "C-h F") #'helpful-function))
+
+  (use-package ace-jump-mode
+    :config
+    ;;
+    ;; enable a more powerful jump back function from ace jump mode
+    ;;
+    (ace-jump-mode-pop-mark)
+    (ace-jump-mode-enable-mark-sync)
+    :bind
+    ("C-x SPC" . ace-jump-mode-pop-mark)
+    ("C-c j" . ace-jump-word-mode)
+    ("C-c k" . ace-jump-char-mode)
+    ("C-c l" . ace-jump-line-mode)
+    )
+
+
 #+end_src
 
 # Local Variables:
