@@ -242,7 +242,7 @@ Also doom modline!
 
 
     (use-package all-the-icons-completion
-      :config
+      :init
       (all-the-icons-completion-mode))
 
     ;; Many major modes do no highlighting of number literals, so we do it for them
@@ -268,85 +268,91 @@ Okay, let's go with Vertico/Consult way...
 *** TODO Vertico
 #+begin_src emacs-lisp
 
-  (use-package vertico
-    :straight
-    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
-    :init
-    (vertico-mode)
+    (use-package vertico
+      :straight
+      (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+      :init
+      (vertico-mode)
 
-    ;; Different scroll margin
-    ;; (setq vertico-scroll-margin 0)
+      ;; Different scroll margin
+      ;; (setq vertico-scroll-margin 0)
 
-    ;; Show more candidates
-    (setq vertico-count 20)
+      ;; Show more candidates
+      (setq vertico-count 20)
 
-    ;; Grow and shrink the Vertico minibuffer
-    (setq vertico-resize t)
+      ;; Grow and shrink the Vertico minibuffer
+      (setq vertico-resize t)
 
-    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-    (setq vertico-cycle t))
+      ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+      (setq vertico-cycle t))
 
-    ;; (use-package vertico-posframe
-    ;;   :hook (vertico-mode . vertico-posframe-mode))
+      ;; (use-package vertico-posframe
+      ;;   :hook (vertico-mode . vertico-posframe-mode))
 
-  (use-package vertico-multiform
-    :straight
-    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
-    :after vertico
-    :init
+    (use-package vertico-multiform
+      :straight
+      (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+      :after vertico
+      :init
 
-    (setq vertico-multiform-commands
-      '(
-        ;; (consult-line
-        ;;  posframe
-        ;;  (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
-        ;;  (vertico-posframe-border-width . 10)
-        ;;  ;; NOTE: This is useful when emacs is used in both in X and
-        ;;  ;; terminal, for posframe do not work well in terminal, so
-        ;;  ;; vertico-buffer-mode will be used as fallback at the
-        ;;  ;; moment.
-        ;; (vertico-posframe-fallback-mode . vertico-buffer-mode)
-        (execute-extended-command indexed reverse)
-        (t buffer)
-        ))
+      (setq vertico-multiform-commands
+        '(
+          ;; (consult-line
+          ;;  posframe
+          ;;  (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+          ;;  (vertico-posframe-border-width . 10)
+          ;;  ;; NOTE: This is useful when emacs is used in both in X and
+          ;;  ;; terminal, for posframe do not work well in terminal, so
+          ;;  ;; vertico-buffer-mode will be used as fallback at the
+          ;;  ;; moment.
+          ;; (vertico-posframe-fallback-mode . vertico-buffer-mode)
+          (execute-extended-command indexed reverse)
+          (t buffer)
+          ))
 
-    ;; Enable vertico-multiform
-       (vertico-multiform-mode t))
+      ;; Enable vertico-multiform
+         (vertico-multiform-mode t))
 
-  (use-package vertico-indexed
-    :straight
-    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
-    :after vertico)
+    (use-package vertico-indexed
+      :straight
+      (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+      :after vertico)
 
-  (use-package vertico-quick
-    :straight
-    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
-    :after vertico)
+    (use-package vertico-quick
+      :straight
+      (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+      :after vertico)
 
-  (use-package vertico-reverse
-    :straight
-    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
-    :after vertico)
+    (use-package vertico-reverse
+      :straight
+      (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+      :after vertico)
 
-  ;; Configure directory extension.
-  (use-package vertico-directory
-    :straight
-    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
-    :after vertico
-    :ensure nil
-    ;; More convenient directory navigation commands
-    :bind (:map vertico-map
-                ("RET" . vertico-directory-enter)
-                ("DEL" . vertico-directory-delete-char)
-                ("M-DEL" . vertico-directory-delete-word))
-    ;; Tidy shadowed file names
-    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+    ;; Configure directory extension.
+    (use-package vertico-directory
+      :straight
+      (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+      :after vertico
+      :ensure t
+      ;; More convenient directory navigation commands
+      :bind (:map vertico-map
+                  ("RET" . vertico-directory-enter)
+                  ("DEL" . vertico-directory-delete-char)
+                  ("M-DEL" . vertico-directory-delete-word))
+      ;; Tidy shadowed file names
+      :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
-  (use-package vertico-mouse
-    :straight
-    (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
-    :after vertico
-    :init (vertico-mouse-mode))
+    (use-package vertico-mouse
+      :straight
+      (:type git :host github :repo "emacs-straight/vertico" :files ("*.el" "extensions/*.el"))
+      :after vertico
+      :init
+      (vertico-mouse-mode)
+      ;; vertico-mouse-face intherits from face 'hightlight'
+      ;; Some how the default foregroung and backgroung colors are all white for 'highlight' face
+      ;; which causes unreadable line when you highlight the completion with mouse
+      (set-face-foreground 'vertico-mouse "navy"))
+  ;;    :init (vertico-mouse-mode))
 
 
 #+end_src
@@ -372,6 +378,11 @@ Okay, let's go with Vertico/Consult way...
            ("M-s g" . consult-ripgrep)
 
            ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+
+           ;; Custom M-# bindings for fast register access
+           ("M-\"" . consult-register-load)
+           ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+           ("C-M-\"" . consult-register)
 
            ;;("M-g e" . consult-compile-error)
            ;;("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
@@ -399,13 +410,83 @@ Okay, let's go with Vertico/Consult way...
            ;; Minibuffer history
            :map minibuffer-local-map
            ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-    ))
+           )
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+
+    ;; The :init configuration is always executed (Not lazy)
+    :init
+
+    ;; Optionally configure the register formatting. This improves the register
+    ;; preview for `consult-register', `consult-register-load',
+    ;; `consult-register-store' and the Emacs built-ins.
+    (setq register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
+
+    ;; Optionally tweak the register preview window.
+    ;; This adds thin lines, sorting and hides the mode line of the window.
+    (advice-add #'register-preview :override #'consult-register-window)
+
+    ;; Use Consult to select xref locations with preview
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
+
+    )
 
   (use-package consult-dir
     :ensure t)
 
   (use-package consult-flycheck)
 
+#+end_src
+
+*** TODO Childframe Support for Completion at Point
+
+#+begin_src emacs-lisp
+  ;; Enable Corfu completion UI
+  ;; See the Corfu README for more configuration tips.
+  (use-package corfu
+    :ensure t
+    :init
+    (global-corfu-mode))
+
+  ;; Add extensions
+  (use-package cape
+    :ensure t
+    ;; Bind dedicated completion commands
+    ;; Alternative prefix keys: C-c p, M-p, M-+, ...
+    :bind (("M-p p" . completion-at-point) ;; capf
+           ("M-p t" . complete-tag)        ;; etags
+           ("M-p d" . cape-dabbrev)        ;; or dabbrev-completion
+           ("M-p h" . cape-history)
+           ("M-p f" . cape-file)
+           ("M-p k" . cape-keyword)
+           ("M-p s" . cape-symbol)
+           ("M-p a" . cape-abbrev)
+           ("M-p i" . cape-ispell)
+           ("M-p l" . cape-line)
+           ("M-p w" . cape-dict)
+           ("M-p \\" . cape-tex)
+           ("M-p _" . cape-tex)
+           ("M-p ^" . cape-tex)
+           ("M-p &" . cape-sgml)
+           ("M-p r" . cape-rfc1345))
+    :init
+    ;; Add `completion-at-point-functions', used by `completion-at-point'.
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    ;;(add-to-list 'completion-at-point-functions #'cape-history)
+    ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
+    ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+    ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+    ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+    ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+    ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
+    ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+    ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
+    ;;(add-to-list 'completion-at-point-functions #'cape-line)
+  )  
 #+end_src
 
 *** Embark
@@ -556,7 +637,7 @@ Enable descriptions/annotations for completion minibuffer
 
 ** TODO Org-Mode
 
-** Term
+** Terminal
 
 *** TODO VTerm
 Needs some more configuration. zsh escape codes, tmux ecc...
@@ -568,6 +649,8 @@ Needs some more configuration. zsh escape codes, tmux ecc...
         :init
         (setq vterm-shell 'eshell))
 #+end_src
+
+*** TODO Eshell
 
 ** Miscellaneous
 
