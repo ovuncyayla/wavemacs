@@ -762,6 +762,24 @@ Enable descriptions/annotations for completion minibuffer
     (tree-sitter-after-on . tree-sitter-hl-mode))
 #+end_src
 
+*** Snippets
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :hook (emacs-startup . yas-reload-all)
+
+  :config
+  (yas-global-mode))
+
+(use-package yasnippet-snippets
+  :after yasnippet
+
+  :config
+  (let ((skip-file (expand-file-name "prog-mode/.yas-skip"
+                                     yasnippet-snippets-dir)))
+    (when (not (file-exists-p skip-file))
+#+end_src
+
 ** TODO Org-Mode
 
 ** Terminal
