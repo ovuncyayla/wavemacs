@@ -426,7 +426,7 @@ Just incase...
 (use-package treemacs-tab-bar ;;treemacs-tab-bar if you use tab-bar-mode
   :after (treemacs)
   :ensure t
-  :config (treemacs-set-scope-type 'Tabs))  
+  :config (treemacs-set-scope-type 'Tabs))
 #+end_src
 
 *** Other UI Releated Things
@@ -975,7 +975,7 @@ Enable descriptions/annotations for completion minibuffer
     ;; :config
     ;; (dap-ui-mode 1)
     :commands dap-debug
-    ;; TODO Setup dap mode for languages 
+    ;; TODO Setup dap mode for languages
     ;; :config
     ;; ;; Set up Node debugging
     ;; ;; (require 'dap-node)
@@ -1079,6 +1079,13 @@ Enable descriptions/annotations for completion minibuffer
 #+end_src
 
 **** TODO Java
+
+#+begin_src emacs-lisp
+  (use-package lsp-java
+    :ensure t
+    :hook (java-mode-hook . lsp-deferred))
+;;    :config (add-hook 'java-mode-hook 'lsp))
+#+end_src
 
 **** TODO JS/TS
 
