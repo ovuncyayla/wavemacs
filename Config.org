@@ -798,17 +798,72 @@ Various stuff that doesn't belong to a spesific place...
     ;;
     ;; enable a more powerful jump back function from ace jump mode
     ;;
-    (ace-jump-mode-pop-mark)
+    ;; (ace-jump-mode-pop-mark)
     (ace-jump-mode-enable-mark-sync)
     :bind
-    ("C-x SPC" . ace-jump-mode-pop-mark)
+    ;; ("C-x SPC" . ace-jump-mode-pop-mark)
     ("C-c j" . ace-jump-word-mode)
     ("C-c k" . ace-jump-char-mode)
     ("C-c l" . ace-jump-line-mode)
+    :init
+    (ace-jump-mode 1)
     )
 
   (all-the-icons-completion-mode t) ;; TODO This is a quick fix, remove this
 #+end_src
+
+*** TODO Workspaces
+
+#+begin_src emacs-lisp
+  (use-package persp-mode
+    :ensure t
+    :commands persp-switch-to-buffer
+    :init
+    (setq persp-autokill-buffer-on-remove 'kill-weak
+          persp-reset-windows-on-nil-window-conf nil
+          persp-nil-hidden t
+          persp-auto-save-fname "autosave"
+          persp-save-dir (concat user-emacs-directory "workspaces/")
+          persp-set-last-persp-for-new-frames t
+          persp-switch-to-added-buffer nil
+          persp-kill-foreign-buffer-behaviour 'kill
+          persp-remove-buffers-from-nil-persp-behaviour nil
+          persp-auto-resume-time -1 ; Don't auto-load on startup
+          persp-auto-save-opt (if noninteractive 0 1) ; auto-save on kill
+          persp-keymap-prefix (kbd "C-c w")
+          )
+
+    ;; (add-hook 'tab-bar-mode-hook
+    ;; (defun +workspaces-set-up-tab-bar-integration-h ()
+    ;;   (add-hook 'persp-before-deactivate-functions #'+workspaces-save-tab-bar-data-h)
+    ;;   (add-hook 'persp-activated-functions #'+workspaces-load-tab-bar-data-h)
+    ;;   ;; Load and save configurations for tab-bar.
+    ;;   (add-hook 'persp-before-save-state-to-file-functions #'+workspaces-save-tab-bar-data-to-file-h)
+    ;; (+workspaces-load-tab-bar-data-from-file-h)))
+
+    ;; (define-key persp-key-map (kbd ...) ...)
+    (persp-mode t)
+    )
+
+  (use-package persp-mode-projectile-bridge
+    :straight
+      (:type git :host github :repo "Bad-ptr/persp-mode-projectile-bridge.el")
+    :ensure t
+    :after persp-mode
+    :init
+    (with-eval-after-load "persp-mode-projectile-bridge-autoloads"
+      (add-hook 'persp-mode-projectile-bridge-mode-hook
+                #'(lambda ()
+                    (if persp-mode-projectile-bridge-mode
+                        (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
+                      (persp-mode-projectile-bridge-kill-perspectives))))
+      (add-hook 'after-init-hook
+                #'(lambda ()
+                    (persp-mode-projectile-bridge-mode 1))
+                t))
+    )
+#+end_src
+
 
 # Local Variables:
 # eval: (add-hook 'after-save-hook (lambda ()(if (y-or-n-p "Reload?")(load-file user-init-file))) nil t)
