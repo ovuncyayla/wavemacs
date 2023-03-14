@@ -1046,7 +1046,22 @@ Enable descriptions/annotations for completion minibuffer
 
 **** TODO Python
 
+#+begin_src emacs-lisp
+  (use-package python-mode
+    :ensure t
+    :hook (python-mode . lsp-deferred)
+    :custom
+    (python-shell-interpreter "python")
+    (dap-python-executable "python")
+    (dap-python-debugger 'debugpy)
+    :config
+    (require 'dap-python))
 
+  (use-package pyvenv
+    :after python-mode
+    :config
+    (pyvenv-mode 1))
+#+end_src
 
 **** TODO Java
 
