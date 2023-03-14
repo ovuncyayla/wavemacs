@@ -133,7 +133,6 @@ tangle all of the configuration into 'init.el'
     auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-cache-directory)
     projectile-known-projects-file (expand-file-name "projectile-bookmarks.eld" user-cache-directory))
 
-  ;;;; Coding specific setting
   ;;;; Automatically add ending brackets and braces
   (electric-pair-mode 1)
 
@@ -893,6 +892,10 @@ Various stuff that doesn't belong to a spesific place...
   (use-package savehist
     :init
     (savehist-mode))
+
+  ;; Improved highlightning
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
 
   ;; Better help docs
   (use-package helpful
