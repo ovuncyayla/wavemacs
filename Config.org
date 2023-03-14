@@ -734,6 +734,34 @@ Enable descriptions/annotations for completion minibuffer
 
 #+end_src
 
+*** Tree-sitter
+
+#+begin_src emacs-lisp
+  (use-package tree-sitter
+    :hook
+    ((css-mode
+      js-mode
+      json-mode
+      php-mode
+      ruby-mode
+      rust-mode
+      python-mode
+      sh-mode
+      terraform-mode
+      typescript-mode
+      yaml-mode) . tree-sitter-mode-enable)
+
+    :preface
+    (defun tree-sitter-mode-enable ()
+      (tree-sitter-mode t))
+
+    :defer t)
+
+  (use-package tree-sitter-langs
+    :hook
+    (tree-sitter-after-on . tree-sitter-hl-mode))
+#+end_src
+
 ** TODO Org-Mode
 
 ** Terminal
