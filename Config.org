@@ -538,6 +538,11 @@ Okay, let's go with Vertico/Consult way...
 
   (use-package consult-flycheck)
 
+  (use-package consult-lsp
+    :ensure t
+    :bind
+    (("C-c C-\\" . 'consult-lsp-diagnostics)))
+
 #+end_src
 
 *** TODO Childframe Support for Completion at Point
@@ -700,7 +705,7 @@ Enable descriptions/annotations for completion minibuffer
 #+end_src
 
 
-** Coding
+** TODO Coding
 
 *** Best Git FE Ever!
 
@@ -737,29 +742,102 @@ Enable descriptions/annotations for completion minibuffer
 *** Tree-sitter
 
 #+begin_src emacs-lisp
-  (use-package tree-sitter
-    :hook
-    ((css-mode
-      js-mode
-      json-mode
-      php-mode
-      ruby-mode
-      rust-mode
-      python-mode
-      sh-mode
-      terraform-mode
-      typescript-mode
-      yaml-mode) . tree-sitter-mode-enable)
+   (use-package tree-sitter
+     :defer t
+     :hook
+     ((css-mode
+       js-mode
+       json-mode
+       php-mode
+       ruby-mode
+       rust-mode
+       python-mode
+       sh-mode
+       terraform-mode
+       typescript-mode
+       yaml-mode) . tree-sitter-mode-enable)
 
-    :preface
-    (defun tree-sitter-mode-enable ()
-      (tree-sitter-mode t))
+     :preface
+     (defun tree-sitter-mode-enable ()
+       (tree-sitter-mode t)))
 
-    :defer t)
+   (use-package tree-sitter-langs
+     :hook
+     (tree-sitter-after-on . tree-sitter-hl-mode))
+#+end_src
 
-  (use-package tree-sitter-langs
-    :hook
-    (tree-sitter-after-on . tree-sitter-hl-mode))
+*** Lsp
+
+#+begin_src emacs-lisp
+
+  (use-package lsp-mode
+    :ensure t
+    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+           (python-mode . lsp)
+           (rust-mode . lsp)
+           (js-mode . lsp)
+           (sh-mode . lsp)
+           ;; if you want which-key integration
+           (lsp-mode . lsp-enable-which-key-integration))
+    :commands
+    lsp
+    lsp-deferred
+    lsp-format-buffer-on-save-mode
+    lsp-organize-imports-on-save-mode
+
+    :custom
+    (lsp-completion-provider :capf)
+    (lsp-completion-show-detail t)
+    (lsp-completion-show-kind t)
+    (lsp-eldoc-enable-hover t)
+    (lsp-eldoc-render-all nil)
+    (lsp-enable-file-watchers t)
+    (lsp-enable-imenu t)
+    (lsp-enable-symbol-highlighting t)
+    (lsp-enable-xref t)
+    (lsp-headerline-breadcrumb-enable t)
+    (lsp-idle-delay 0.4)
+    (lsp-keymap-prefix "M-;")
+    (lsp-lens-enable t)
+    (lsp-modeline-diagnostics-enable t)
+    (lsp-semantic-tokens-apply-modifiers t)
+    (lsp-semantic-tokens-enable t)
+    (lsp-semantic-tokens-warn-on-missing-face nil)
+    (lsp-signature-auto-activate t)
+    (lsp-signature-render-documentation t)
+
+    :init
+    ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+    (setq lsp-keymap-prefix "M-L")    
+    (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+    (lsp-headerline-breadcrumb-mode))
+
+  (use-package lsp-ui
+    :defer t
+    :bind
+    (:map lsp-ui-mode-map
+          ("M-L C-d" . 'lsp-ui-doc-glance)
+          ("M-L D" . 'lsp-ui-doc-show)
+          ("M-L R" . 'lsp-ui-peek-find-references)
+          ("M-L J" . 'lsp-ui-peek-find-definitions))
+
+    :custom
+    (lsp-ui-doc-alignment 'window)
+    (lsp-ui-doc-delay 0.2)
+    (lsp-ui-doc-enable t)
+    (lsp-ui-doc-header nil)
+    (lsp-ui-doc-include-signature t)
+    (lsp-ui-doc-max-height 45)
+    (lsp-ui-doc-position 'at-point)
+    (lsp-ui-doc-show-with-cursor nil)
+    (lsp-ui-doc-show-with-mouse nil)
+    (lsp-ui-doc-use-webkit nil)
+    (lsp-ui-peek-always-show nil)
+    (lsp-ui-sideline-enable t)
+    (lsp-ui-sideline-show-code-actions t)
+    (lsp-ui-sideline-show-diagnostics t)
+    (lsp-ui-sideline-show-hover nil))
+
 #+end_src
 
 *** Snippets
@@ -773,11 +851,10 @@ Enable descriptions/annotations for completion minibuffer
 
 (use-package yasnippet-snippets
   :after yasnippet
-
   :config
   (let ((skip-file (expand-file-name "prog-mode/.yas-skip"
                                      yasnippet-snippets-dir)))
-    (when (not (file-exists-p skip-file))
+    (when (not (file-exists-p skip-file)))))
 #+end_src
 
 ** TODO Org-Mode
@@ -852,7 +929,7 @@ Various stuff that doesn't belong to a spesific place...
     ("C-c k" . ace-jump-char-mode)
     ("C-c l" . ace-jump-line-mode)
     :init
-    (ace-jump-mode 1)
+    ;;(ace-jump-mode 1)
     )
 
   (all-the-icons-completion-mode t) ;; TODO This is a quick fix, remove this
