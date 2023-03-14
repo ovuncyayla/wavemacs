@@ -839,6 +839,30 @@ Enable descriptions/annotations for completion minibuffer
 
 #+end_src
 
+*** TODO DAP
+
+#+begin_src emacs-lisp
+  (use-package dap-mode
+    ;; Uncomment the config below if you want all UI panes to be hidden by default!
+    ;; :custom
+    ;; (lsp-enable-dap-auto-configure nil)
+    ;; :config
+    ;; (dap-ui-mode 1)
+    :commands dap-debug
+    ;; TODO Setup dap mode for languages 
+    ;; :config
+    ;; ;; Set up Node debugging
+    ;; ;; (require 'dap-node)
+    ;; ;; (dap-node-setup) ;; Automatically installs Node debug adapter if needed
+
+    ;; ;; Bind `C-c l d` to `dap-hydra` for easy access
+    ;; (general-define-key
+    ;;   :keymaps 'lsp-mode-map
+    ;;   :prefix lsp-keymap-prefix
+    ;; "d" '(dap-hydra t :wk "debugger")))
+    )
+#+end_src
+
 *** Snippets
 #+begin_src emacs-lisp
 (use-package yasnippet
@@ -899,6 +923,9 @@ Enable descriptions/annotations for completion minibuffer
   (use-package rust-playground
     :defer t)
 #+end_src
+
+**** TODO TOML
+
 **** TODO Python
 
 
@@ -906,6 +933,8 @@ Enable descriptions/annotations for completion minibuffer
 **** TODO Java
 
 **** TODO JS/TS
+
+**** TODO Json
 
 **** TODO Web Mode
 
