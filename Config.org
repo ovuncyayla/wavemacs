@@ -670,6 +670,14 @@ Okay, let's go with Vertico/Consult way...
     :init
     (global-corfu-mode))
 
+  (use-package kind-icon
+    :ensure t
+    :after corfu
+    :custom
+    (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+    :config
+    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
   ;; Add extensions
   (use-package cape
     :ensure t
@@ -1061,6 +1069,13 @@ Enable descriptions/annotations for completion minibuffer
     :after python-mode
     :config
     (pyvenv-mode 1))
+
+  (use-package lsp-pyright
+    :ensure t
+    :hook (python-mode . (lambda ()
+                           (require 'lsp-pyright)
+                           (lsp-deferred))))
+
 #+end_src
 
 **** TODO Java
