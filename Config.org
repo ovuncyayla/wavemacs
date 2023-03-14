@@ -807,7 +807,7 @@ Enable descriptions/annotations for completion minibuffer
 
     :init
     ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-    (setq lsp-keymap-prefix "M-L")    
+    (setq lsp-keymap-prefix "M-L")
     (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
     (lsp-headerline-breadcrumb-mode))
 
@@ -854,6 +854,81 @@ Enable descriptions/annotations for completion minibuffer
   (let ((skip-file (expand-file-name "prog-mode/.yas-skip"
                                      yasnippet-snippets-dir)))
     (when (not (file-exists-p skip-file)))))
+#+end_src
+
+*** Languages
+
+**** TODO Lisp
+
+**** TODO Rust
+#+begin_src emacs-lisp
+
+  (defun wave-rust-mode-setup ()
+      (setq-local rust-format-on-save t))
+
+  (use-package rust-mode
+    :ensure t
+    :mode "\\.rs\\'"
+    :interpreter "rust"
+    :commands rust-mode
+    :bind
+    (:map rust-mode-map
+          ("RET" . newline-and-indent))
+
+    :hook
+    (rust-mode . wave-rust-mode-setup))
+
+  (defun wave-lsp-rust-mode-setup ()
+    (lsp-format-buffer-on-save-mode t)
+    (lsp-organize-imports-on-save-mode t)
+    (lsp-deferred))
+
+  (use-package lsp-rust
+    :straight lsp-mode
+
+    :hook
+    (rust-mode . wave-lsp-rust-mode-setup))
+
+  (use-package cargo
+    :hook (rust-mode . cargo-minor-mode))
+
+  (use-package flycheck-rust
+    :after rust-mode
+    :hook (flycheck-mode . flycheck-rust-setup))
+
+  (use-package rust-playground
+    :defer t)
+#+end_src
+**** TODO Python
+
+
+
+**** TODO Java
+
+**** TODO JS/TS
+
+**** TODO Web Mode
+
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :mode
+    "\\.html\\'"
+    "\\.html.erb\\'"
+    "\\.tpl\\'"
+
+    :bind
+    (:map web-mode-map
+          ("C-j" . newline-and-indent))
+
+    :hook
+    (web-mode . siren-web-mode-setup)
+
+    :custom
+    (web-mode-code-indent-offset 2)
+    (web-mode-css-indent-offset 2)
+    (web-mode-markup-indent-offset 2)
+    (web-mode-attr-indent-offset 2)
+    (web-mode-sql-indent-offset 2))
 #+end_src
 
 ** TODO Org-Mode
