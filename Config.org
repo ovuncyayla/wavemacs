@@ -1104,10 +1104,12 @@ Enable descriptions/annotations for completion minibuffer
 **** TODO Java
 
 #+begin_src emacs-lisp
-  (use-package lsp-java
-    :ensure t
-    :hook (java-mode-hook . lsp-deferred))
-;;    :config (add-hook 'java-mode-hook 'lsp))
+    (use-package lsp-java
+      :ensure t
+      :custom
+      (lsp-java-configuration-maven-user-settings "/home/user/etc/settings.xml") ;; TODO Modify the path
+      :hook (java-mode-hook . lsp-deferred))
+  ;;    :config (add-hook 'java-mode-hook 'lsp))
 #+end_src
 
 **** TODO JS/TS
