@@ -1033,6 +1033,16 @@ Enable descriptions/annotations for completion minibuffer
     ;;   (when (not (file-exists-p skip-file)))))
 #+end_src
 
+*** TODO Rest Client
+
+#+begin_src emacs-lisp
+
+  (use-package restclient)
+  (use-package ob-restclient)
+  (use-package company-restclient)
+
+#+end_src
+
 *** Languages
 
 **** TODO Lisp
@@ -1119,6 +1129,18 @@ Enable descriptions/annotations for completion minibuffer
 **** TODO JS/TS
 
 **** TODO Json
+
+#+begin_src emacs-lisp
+
+  (use-package json-mode
+    :ensure t
+    :mode
+    "\\.json\\'"
+    :commands
+    json-mode)
+  ;;(use-package json-snatcher)
+
+#+end_src
 
 **** TODO Web Mode
 
