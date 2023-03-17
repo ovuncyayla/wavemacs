@@ -521,6 +521,7 @@ Okay, let's go with Vertico/Consult way...
           ;;  ;; moment.
           ;; (vertico-posframe-fallback-mode . vertico-buffer-mode)
           (execute-extended-command indexed reverse)
+          ;; (t buffer (vertico-buffer-display-action . (display-buffer-same-window)) )
           (t buffer)
           ))
 
@@ -703,16 +704,16 @@ Okay, let's go with Vertico/Consult way...
     ;; Add `completion-at-point-functions', used by `completion-at-point'.
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file)
-    ;;(add-to-list 'completion-at-point-functions #'cape-history)
-    ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
-    ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+    (add-to-list 'completion-at-point-functions #'cape-history)
+    (add-to-list 'completion-at-point-functions #'cape-keyword)
+    (add-to-list 'completion-at-point-functions #'cape-tex)
     ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
     ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
     ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
     ;;(add-to-list 'completion-at-point-functions #'cape-ispell)
     ;;(add-to-list 'completion-at-point-functions #'cape-dict)
-    ;;(add-to-list 'completion-at-point-functions #'cape-symbol)
-    ;;(add-to-list 'completion-at-point-functions #'cape-line)
+    (add-to-list 'completion-at-point-functions #'cape-symbol)
+    (add-to-list 'completion-at-point-functions #'cape-line)
   )
 #+end_src
 
@@ -835,8 +836,11 @@ Enable descriptions/annotations for completion minibuffer
 #+begin_src emacs-lisp
   (use-package magit
     :ensure t
-    :init
-    (setq magit-diff-refine-hunk t))
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+    (magit-diff-refine-hunk t))
+    ;; :init
+    ;; (setq magit-diff-refine-hunk t))
 #+end_src
 
 *** Projectile
@@ -1014,19 +1018,19 @@ Enable descriptions/annotations for completion minibuffer
 
 *** Snippets
 #+begin_src emacs-lisp
-(use-package yasnippet
-  :diminish yas-minor-mode
-  :hook (emacs-startup . yas-reload-all)
+  (use-package yasnippet
+    :diminish yas-minor-mode
+    :hook (emacs-startup . yas-reload-all)
 
-  :config
-  (yas-global-mode))
+    :config
+    (yas-global-mode))
 
-(use-package yasnippet-snippets
-  :after yasnippet
-  :config
-  (let ((skip-file (expand-file-name "prog-mode/.yas-skip"
-                                     yasnippet-snippets-dir)))
-    (when (not (file-exists-p skip-file)))))
+  (use-package yasnippet-snippets
+    :after yasnippet)
+    ;; :config
+    ;; (let ((skip-file (expand-file-name "prog-mode/.yas-skip"
+    ;;                                    yasnippet-snippets-dir)))
+    ;;   (when (not (file-exists-p skip-file)))))
 #+end_src
 
 *** Languages
