@@ -1255,6 +1255,12 @@ Needs some more configuration. zsh escape codes, tmux ecc...
 
 *** TODO Eshell
 
+** TODO Tramp
+#+begin_src emacs-lisp
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+#+end_src
+
+
 ** Miscellaneous
 
 Various stuff that doesn't belong to a spesific place...
