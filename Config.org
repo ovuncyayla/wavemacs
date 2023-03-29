@@ -113,7 +113,7 @@ tangle all of the configuration into 'init.el'
   (setq resize-mini-windows 'grow-only)
 
   ;; A simple frame title
-  (setq frame-title-format '("%b – WavEmacs")
+  (setq frame-title-format '("%b – WaveEmacs")
         icon-title-format frame-title-format)
 
   ;;;; Enable soft-wrap
@@ -1255,6 +1255,8 @@ Enable descriptions/annotations for completion minibuffer
 
   (use-package org
     :ensure org-plus-contrib
+    :custom
+    (org-directory "~/org/")
     :config
     ;; Replace list hyphen with dot
     (font-lock-add-keywords 'org-mode
