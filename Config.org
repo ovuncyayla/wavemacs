@@ -1254,33 +1254,44 @@ Enable descriptions/annotations for completion minibuffer
     (visual-fill-column-center-text t)
     :hook (org-mode . visual-fill-column-mode))
 
-  (defvar +org-capture-personal-file "personal.org"
+  (defvar +org-capture-personal-file "~/org/personal.org"
     "Default target for personal todo's and note entries.")
 
-  (defvar +org-capture-work-file "work.org"
+  (defvar +org-capture-projects-file "~/org/projects.org"
+    "Default target for project related todo's and notes.")
+
+  (defvar +org-capture-work-file "~/org/work.org"
     "Default target for work related todo's and notes.")
 
-  (defvar +org-capture-journal-file "journal.org"
+  (defvar +org-capture-journal-file "~/org/journal.org"
     "Default target for storing timestamped journal entries.")
 
-  (defvar +org-capture-misc-file "miscellaneous.org"
+  (defvar +org-capture-misc-file "~/org/miscellaneous.org"
     "Default target for storing all the rest.")
 
-  (defun wave/org-capture-project-heading (type)
+  (defun wave/org-capture-heading (type)
   "Get heading for project capture template
   Returns '[Inbox/Unclassified]' if not in project"
   (if (projectile-project-name)
       (concat "[" (projectile-project-name) "/" type "]")
     (concat "[Inbox/" type "]")))
 
+  (defun wave/org-capture-fpath (fname)
+    "Get absolute path for capture template file"
+    (expand-file-name fname org-directory))
+
+  (setq +org-capture-all-files (list +org-capture-personal-file
+                                     +org-capture-work-file
+                                     +org-capture-journal-file
+                                     +org-capture-misc-file))
+
   (use-package org
     :ensure org-plus-contrib
+    :bind
+    ("C-c n" . org-capture)
     :custom
     (org-directory "~/org/")
-    (org-agenda-files (list +org-capture-personal-file
-                       +org-capture-work-file
-                       +org-capture-journal-file
-                       +org-capture-misc-file))
+    (org-agenda-files +org-capture-all-files)
     (org-agenda-start-with-log-mode t)
     (org-log-done 'time)
     (org-log-into-drawer t)
@@ -1329,20 +1340,37 @@ Enable descriptions/annotations for completion minibuffer
        "* %u %?\n%i\n%a" :prepend t)
       ("j" "Journal" entry
        (file+olp+datetree +org-capture-journal-file)
-       "* %U %?\n%i\n%a" :prepend t) 
+       "* %U %?\n%i\n%a" :prepend t)
       ("m" "Miscellaneous" entry
        (file+olp+datetree +org-capture-misc-file)
        "* %U %?\n%i\n%a" :prepend t)
-      
+
+      ("w" "Templates for work")
+      ("wt" "Work-Todo" entry
+       (file+function +org-capture-work-file (lambda () (wave/org-capture-heading "Tasks")))
+       "* TODO %?\n%i\n%a" :prepend t)
+      ("wn" "Work-Notes" entry
+       (file+function +org-capture-work-file (lambda () (wave/org-capture-heading "Notes")))
+       "* %U %?\n%i\n%a" :prepend t)
+
       ("p" "Templates for projects")
       ("pt" "Project-Todo" entry
-       (file+headline +org-capture-projects-file (wave/org-capture-project-heading "Tasks"))
+       (file+function +org-capture-projects-file (lambda () (wave/org-capture-heading "Tasks")))
        "* TODO %?\n%i\n%a" :prepend t)
-      ("pn" "Project-Notes" entry  ; {project-root}/notes.org
-       (file+headline +org-capture-projects-file (wave/org-capture-project-heading "Notes"))
+      ("pn" "Project-Notes" entry
+       (file+function +org-capture-projects-file (lambda () (wave/org-capture-heading "Notes")))
        "* %U %?\n%i\n%a" :prepend t)))
 
     :config
+    ;;(setq org-directory "~/org/")
+    ;; Ensure thath all org files exist to avoid the question:
+    ;;"non-existent agenda file ~/file.org. [R]emove from list or [A]bort?"
+    (progn
+      (unless (f-directory-p org-directory) (make-directory org-directory))
+      (dolist (fname +org-capture-all-files)
+        (let ((file (expand-file-name fname org-directory)))
+          (unless (file-exists-p file) (make-empty-file (expand-file-name fname org-directory))))))
+
     ;; Replace list hyphen with dot
     (font-lock-add-keywords 'org-mode
                             '(("^ *\\([-]\\) "
@@ -1390,10 +1418,6 @@ Enable descriptions/annotations for completion minibuffer
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("py" . "src python"))
-
-
-
-
     )
 
 
