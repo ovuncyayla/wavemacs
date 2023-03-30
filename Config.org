@@ -119,6 +119,7 @@ tangle all of the configuration into 'init.el'
   ;;;; Enable soft-wrap
   (global-visual-line-mode 1)
   (setq column-number-mode t)
+  (setq display-line-numbers-type 'relative)
 
   ;;;; Maintain a list of recent files opened
   (recentf-mode 1)
@@ -1253,10 +1254,94 @@ Enable descriptions/annotations for completion minibuffer
     (visual-fill-column-center-text t)
     :hook (org-mode . visual-fill-column-mode))
 
+  (defvar +org-capture-personal-file "personal.org"
+    "Default target for personal todo's and note entries.")
+
+  (defvar +org-capture-work-file "work.org"
+    "Default target for work related todo's and notes.")
+
+  (defvar +org-capture-journal-file "journal.org"
+    "Default target for storing timestamped journal entries.")
+
+  (defvar +org-capture-misc-file "miscellaneous.org"
+    "Default target for storing all the rest.")
+
+  (defun wave/org-capture-project-heading (type)
+  "Get heading for project capture template
+  Returns '[Inbox/Unclassified]' if not in project"
+  (if (projectile-project-name)
+      (concat "[" (projectile-project-name) "/" type "]")
+    (concat "[Inbox/" type "]")))
+
   (use-package org
     :ensure org-plus-contrib
     :custom
     (org-directory "~/org/")
+    (org-agenda-files (list +org-capture-personal-file
+                       +org-capture-work-file
+                       +org-capture-journal-file
+                       +org-capture-misc-file))
+    (org-agenda-start-with-log-mode t)
+    (org-log-done 'time)
+    (org-log-into-drawer t)
+
+    ;; From Doom Emacs
+    ;; https://github.com/doomemacs/doomemacs/blob/4e105a95af9c4c7e86471e5566eb7a5ff776ec92/modules/lang/org/config.el#L152
+    (org-todo-keywords
+     '((sequence
+        "TODO(t)"  ; A task that needs doing & is ready to do
+        "PROJ(p)"  ; A project, which usually contains other tasks
+        "LOOP(r)"  ; A recurring task
+        "STRT(s)"  ; A task that is in progress
+        "WAIT(w)"  ; Something external is holding up this task
+        "HOLD(h)"  ; This task is paused/on hold because of me
+        "IDEA(i)"  ; An unconfirmed and unapproved task or notion
+        "|"
+        "DONE(d)"  ; Task successfully completed
+        "KILL(k)") ; Task was cancelled, aborted or is no longer applicable
+       (sequence
+        "[ ](T)"   ; A task that needs doing
+        "[-](S)"   ; Task is in progress
+        "[?](W)"   ; Task is being held up or paused
+        "|"
+        "[X](D)")  ; Task was completed
+       (sequence
+        "|"
+        "OKAY(o)"
+        "YES(y)"
+        "NO(n)"))
+     org-todo-keyword-faces
+     '(("[-]"  . +org-todo-active)
+       ("STRT" . +org-todo-active)
+       ("[?]"  . +org-todo-onhold)
+       ("WAIT" . +org-todo-onhold)
+       ("HOLD" . +org-todo-onhold)
+       ("PROJ" . +org-todo-project)
+       ("NO"   . +org-todo-cancel)
+       ("KILL" . +org-todo-cancel)))
+    ;; https://github.com/doomemacs/doomemacs/blob/4e105a95af9c4c7e86471e5566eb7a5ff776ec92/modules/lang/org/config.el#L384
+    (org-capture-templates
+    '(("t" "Personal Todo" entry
+       (file+headline +org-capture-personal-file "[Inbox/Tasks]")
+       "* TODO [ ] %?\n%i\n%a" :prepend t)
+      ("n" "Personal notes" entry
+       (file+headline +org-capture-personal-file "[Inbox/Notes]")
+       "* %u %?\n%i\n%a" :prepend t)
+      ("j" "Journal" entry
+       (file+olp+datetree +org-capture-journal-file)
+       "* %U %?\n%i\n%a" :prepend t) 
+      ("m" "Miscellaneous" entry
+       (file+olp+datetree +org-capture-misc-file)
+       "* %U %?\n%i\n%a" :prepend t)
+      
+      ("p" "Templates for projects")
+      ("pt" "Project-Todo" entry
+       (file+headline +org-capture-projects-file (wave/org-capture-project-heading "Tasks"))
+       "* TODO %?\n%i\n%a" :prepend t)
+      ("pn" "Project-Notes" entry  ; {project-root}/notes.org
+       (file+headline +org-capture-projects-file (wave/org-capture-project-heading "Notes"))
+       "* %U %?\n%i\n%a" :prepend t)))
+
     :config
     ;; Replace list hyphen with dot
     (font-lock-add-keywords 'org-mode
