@@ -454,25 +454,31 @@ Just incase...
       (all-the-icons-install-fonts t)))
 
 
-    (use-package all-the-icons-completion
-      :ensure t
-      :after all-the-icons
-      :init
-      (all-the-icons-completion-mode t))
+  (use-package all-the-icons-completion
+    :ensure t
+    :after all-the-icons
+    :init
+    (all-the-icons-completion-mode t))
 
-    ;; Many major modes do no highlighting of number literals, so we do it for them
-    (use-package highlight-numbers
-      :hook ((prog-mode conf-mode) . highlight-numbers-mode)
-      :config (setq highlight-numbers-generic-regexp "\\_<[[:digit:]]+\\(?:\\.[0-9]*\\)?\\_>"))
+  ;; Many major modes do no highlighting of number literals, so we do it for them
+  (use-package highlight-numbers
+    :hook ((prog-mode conf-mode) . highlight-numbers-mode)
+    :config (setq highlight-numbers-generic-regexp "\\_<[[:digit:]]+\\(?:\\.[0-9]*\\)?\\_>"))
 
-    (use-package hl-line
-      ;; Highlights the current line
-      :init
-      (defvar global-hl-line-modes
-        '(prog-mode text-mode conf-mode special-mode
-                    org-agenda-mode dired-mode)
-        "What modes to enable `hl-line-mode' in.")
-      (global-hl-line-mode))
+  (use-package hl-line
+    ;; Highlights the current line
+    :init
+    (defvar global-hl-line-modes
+      '(prog-mode
+        text-mode
+        conf-mode
+        special-mode
+        org-agenda-mode
+        dired-mode)
+      "What modes to enable `hl-line-mode' in.")
+    (global-hl-line-mode))
+
+  (use-package hl-todo)
 
 #+end_src
 
