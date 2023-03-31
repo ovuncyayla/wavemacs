@@ -193,7 +193,7 @@ Doom themes are great!
   (use-package doom-themes
   :ensure t
   :init
-  (load-theme 'doom-1337 t))
+  (load-theme 'doom-sourcerer t))
 
   (use-package heaven-and-hell
     :ensure t
@@ -201,7 +201,7 @@ Doom themes are great!
     (setq heaven-and-hell-theme-type 'dark)
     (setq heaven-and-hell-themes
       '((light . doom-nord-light)
-        (dark . doom-1337)))
+        (dark . doom-sourcerer)))
     :hook (after-init . heaven-and-hell-init-hook)
     :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
        ("<f6>" . heaven-and-hell-toggle-theme)))
