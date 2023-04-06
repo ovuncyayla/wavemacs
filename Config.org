@@ -180,7 +180,9 @@ tangle all of the configuration into 'init.el'
     (setq ediff-last-windows (current-window-configuration))
     (add-hook 'ediff-after-quit-hook-internal 'ediff-restore-windows)
     ad-do-it)
-  ;;(ediff)
+
+  (setq diary-file "~/org/diary")
+  (calendar-set-date-style 'iso)
 #+end_src
 
 ** UI
