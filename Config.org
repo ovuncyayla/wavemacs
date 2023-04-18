@@ -182,7 +182,7 @@ tangle all of the configuration into 'init.el'
     ad-do-it)
 
   (setq diary-file "~/org/diary")
-  (calendar-set-date-style 'iso)
+  ;;(calendar-set-date-style 'iso)
 #+end_src
 
 ** UI
@@ -875,7 +875,6 @@ Enable descriptions/annotations for completion minibuffer
 #+end_src
 
 ** TODO Coding
-
 *** Best Git FE Ever!
 
 #+begin_src emacs-lisp
@@ -1206,6 +1205,15 @@ Enable descriptions/annotations for completion minibuffer
 #+end_src
 
 **** TODO JS/TS
+#+begin_src emacs-lisp
+  (use-package typescript-mode
+    :mode "\\.ts\\'"
+    :hook
+    (typescript-mode . lsp-deferred)
+    :config
+    (setq typescript-indent-level 2))
+
+#+end_src
 
 **** TODO Json
 
@@ -1463,7 +1471,7 @@ Various stuff that doesn't belong to a spesific place...
     :ensure t
     :init
     (which-key-mode))
-
+  
   ;; Some times it's useful to see the list of commands executed
   (use-package command-log-mode)
 
@@ -1560,6 +1568,9 @@ Various stuff that doesn't belong to a spesific place...
    ("M-s" . dirvish-setup-menu)
    ("M-e" . dirvish-emerge-menu)
    ("M-j" . dirvish-fd-jump)))
+
+  (use-package dockerfile-mode
+    :mode ("Dockerfile" . dockerfile-mode))
 
 #+end_src
 
