@@ -4,7 +4,7 @@
 * Wavemacs Configuration
 Let's try to configure emacs using org mode.
 
-** TODO Dependencies
+** Dependencies
 - Ripgrep(counsult default grep)
 - fd
 - Cmake (for vterm)
@@ -218,7 +218,7 @@ Also doom modline!
     :init (doom-modeline-mode 1))
 #+end_src
 
-*** TODO Dashboard
+*** Dashboard
 - Customize list of actions for dashboar
 
 #+begin_src emacs-lisp
@@ -487,7 +487,7 @@ Just incase...
 ** Completion
 Okay, let's go with Vertico/Consult way...
 
-*** TODO Vertico
+*** Vertico
 #+begin_src emacs-lisp
 
     (use-package vertico
@@ -669,7 +669,7 @@ Okay, let's go with Vertico/Consult way...
 
 #+end_src
 
-*** TODO Childframe Support for Completion at Point
+*** Childframe Support for Completion at Point
 
 #+begin_src emacs-lisp
   ;; Enable Corfu completion UI
@@ -874,7 +874,7 @@ Enable descriptions/annotations for completion minibuffer
 
 #+end_src
 
-** TODO Coding
+** Coding
 *** Best Git FE Ever!
 
 #+begin_src emacs-lisp
@@ -1038,7 +1038,7 @@ Enable descriptions/annotations for completion minibuffer
 
 #+end_src
 
-*** TODO DAP
+*** DAP
 
 #+begin_src emacs-lisp
   (use-package dap-mode
@@ -1111,7 +1111,7 @@ Enable descriptions/annotations for completion minibuffer
     ;;   (when (not (file-exists-p skip-file)))))
 #+end_src
 
-*** TODO Rest Client
+*** Rest Client
 
 #+begin_src emacs-lisp
 
@@ -1123,9 +1123,9 @@ Enable descriptions/annotations for completion minibuffer
 
 *** Languages
 
-**** TODO Lisp
+**** Lisp
 
-**** TODO Rust
+**** Rust
 #+begin_src emacs-lisp
 
   (defun wave-rust-mode-setup ()
@@ -1165,9 +1165,9 @@ Enable descriptions/annotations for completion minibuffer
     :defer t)
 #+end_src
 
-**** TODO TOML
+**** TOML
 
-**** TODO Python
+**** Python
 
 #+begin_src emacs-lisp
   (use-package python-mode
@@ -1193,7 +1193,7 @@ Enable descriptions/annotations for completion minibuffer
 
 #+end_src
 
-**** TODO Java
+**** Java
 
 #+begin_src emacs-lisp
     (use-package lsp-java
@@ -1204,7 +1204,7 @@ Enable descriptions/annotations for completion minibuffer
   ;;    :config (add-hook 'java-mode-hook 'lsp))
 #+end_src
 
-**** TODO JS/TS
+**** JS/TS
 #+begin_src emacs-lisp
   (use-package typescript-mode
     :mode "\\.ts\\'"
@@ -1215,7 +1215,7 @@ Enable descriptions/annotations for completion minibuffer
 
 #+end_src
 
-**** TODO Json
+**** Json
 
 #+begin_src emacs-lisp
 
@@ -1229,7 +1229,7 @@ Enable descriptions/annotations for completion minibuffer
 
 #+end_src
 
-**** TODO Web Mode
+**** Web Mode
 
 #+begin_src emacs-lisp
   (use-package web-mode
@@ -1253,7 +1253,7 @@ Enable descriptions/annotations for completion minibuffer
     (web-mode-sql-indent-offset 2))
 #+end_src
 
-** TODO Org-Mode
+** Org-Mode
 
 #+begin_src emacs-lisp
 
@@ -1441,7 +1441,7 @@ Enable descriptions/annotations for completion minibuffer
 #+end_src
 ** Terminal
 
-*** TODO VTerm
+*** VTerm
 Needs some more configuration. zsh escape codes, tmux ecc...
 #+begin_src emacs-lisp
       ;; TODO set this variable to avoid compile module prompt
@@ -1452,9 +1452,9 @@ Needs some more configuration. zsh escape codes, tmux ecc...
         (setq vterm-shell 'eshell))
 #+end_src
 
-*** TODO Eshell
+*** Eshell
 
-** TODO Tramp
+** Tramp
 #+begin_src emacs-lisp
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
 #+end_src
@@ -1574,7 +1574,7 @@ Various stuff that doesn't belong to a spesific place...
 
 #+end_src
 
-*** TODO Workspaces
+*** Workspaces
 
 #+begin_src emacs-lisp
   (use-package persp-mode
