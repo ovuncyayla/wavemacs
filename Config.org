@@ -1443,7 +1443,8 @@ Enable descriptions/annotations for completion minibuffer
        (lua .t)
        (js . t)
        (sql . t)
-       (python . t)))
+       (python . t)
+       (restclient . t)))
 
     (push '("conf-unix" . conf-unix) org-src-lang-modes)
 
