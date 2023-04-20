@@ -125,15 +125,6 @@ tangle all of the configuration into 'init.el'
   (recentf-mode 1)
   (setq recentf-max-saved-items 50)
 
-  ;;;; Move all the backup files to specific cache directory
-  ;;;; This way you won't have annoying temporary files starting with ~(tilde) in each directory
-  ;;;; Following setting will move temporary files to specific folders inside cache directory in EMACS_DIR
-  (setq user-cache-directory (concat user-emacs-directory "cache"))
-  (setq backup-directory-alist `(("." . ,(expand-file-name "backups" user-cache-directory)))
-    url-history-file (expand-file-name "url/history" user-cache-directory)
-    auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" user-cache-directory)
-    projectile-known-projects-file (expand-file-name "projectile-bookmarks.eld" user-cache-directory))
-
   ;;;; Automatically add ending brackets and braces
   (electric-pair-mode 1)
 
@@ -183,6 +174,24 @@ tangle all of the configuration into 'init.el'
 
   (setq diary-file "~/org/diary")
   ;;(calendar-set-date-style 'iso)
+#+end_src
+
+*** Keep things clean
+#+begin_src emacs-lisp
+  (setq
+   user-cache-directory (expand-file-name "cache" user-emacs-directory)
+   no-littering-etc-directory (expand-file-name "config/" user-cache-directory)
+   no-littering-var-directory (expand-file-name "data/" user-cache-directory))
+
+  (use-package no-littering)
+
+  (add-to-list 'recentf-exclude
+               (recentf-expand-file-name no-littering-var-directory))
+  (add-to-list 'recentf-exclude
+               (recentf-expand-file-name no-littering-etc-directory))
+
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
 
 ** UI
