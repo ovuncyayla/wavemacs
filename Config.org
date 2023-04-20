@@ -913,28 +913,28 @@ Enable descriptions/annotations for completion minibuffer
 *** Tree-sitter
 
 #+begin_src emacs-lisp
-   (use-package tree-sitter
-     :defer t
-     :hook
-     ((css-mode
-       js-mode
-       json-mode
-       php-mode
-       ruby-mode
-       rust-mode
-       python-mode
-       sh-mode
-       terraform-mode
-       typescript-mode
-       yaml-mode) . tree-sitter-mode-enable)
+  (use-package tree-sitter
+    :defer t
+    :hook
+    ((css-mode
+      js-mode
+      json-mode
+      php-mode
+      ruby-mode
+      rust-mode
+      python-mode
+      sh-mode
+      terraform-mode
+      typescript-mode
+      yaml-mode) . tree-sitter-mode-enable)
 
-     :preface
-     (defun tree-sitter-mode-enable ()
-       (tree-sitter-mode t)))
+    :preface
+    (defun tree-sitter-mode-enable ()
+      (tree-sitter-mode t)))
 
-   (use-package tree-sitter-langs
-     :hook
-     (tree-sitter-after-on . tree-sitter-hl-mode))
+  (use-package tree-sitter-langs
+    :hook
+    (tree-sitter-after-on . tree-sitter-hl-mode))
 #+end_src
 
 *** Lsp
@@ -1226,6 +1226,14 @@ Enable descriptions/annotations for completion minibuffer
     :commands
     json-mode)
   ;;(use-package json-snatcher)
+
+#+end_src
+
+**** Yaml
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :mode
+    ("\\.yaml'" . tree-sitter-mode-enable))
 
 #+end_src
 
